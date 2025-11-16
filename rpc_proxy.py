@@ -45,7 +45,7 @@ class SimpleRPCProxy(http.server.BaseHTTPRequestHandler):
         print("\n=== PROXY REQUEST ===")
         print(f"Path: {self.path}")
         print(f"Body: {body.decode(errors='replace')}")
-        print(f"Authorization sent: {_AUTH_HEADER[:20]}…")
+        #print(f"Authorization sent: {_AUTH_HEADER[:20]}…")
         print("=====================\n")
 
         # 3. Forward to Bitcoin Core
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     print(f"   iOS → https://x.x.x.x:{HTTPS_PORT}/…")
     print(f"   Core ← http://{RPC_HOST}:{RPC_PORT}")
     print(f"   User: {RPC_USER}")
-    print(f"   Auth header: {_AUTH_HEADER[:20]}…\n")
+    #print(f"   Auth header: {_AUTH_HEADER[:20]}…\n")
 
     try:
         httpd.serve_forever()
