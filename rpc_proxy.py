@@ -3,7 +3,6 @@
 HTTPS → HTTP proxy for Bitcoin Core RPC
 - RPC user & password are **hard‑coded** (no need to embed in URL)
 - Works with or without /wallet/…
-- Verbose debug output (copy‑paste logs if 401 persists)
 """
 
 import http.server
@@ -19,7 +18,7 @@ from http import HTTPStatus
 RPC_HOST      = "127.0.0.1"          # Bitcoin Core host
 RPC_PORT      = 18443               # regtest (8332 for mainnet)
 HTTPS_PORT    = 8443                # iOS connects here
-CERT_FILE     = "bitcoin-proxy.crt" # self‑signed cert
+CERT_FILE     = "bitcoin-proxy.crt" # self‑signed cert path
 KEY_FILE      = "bitcoin-proxy.key"
 
 # <<<=== HARD‑CODED RPC CREDENTIALS ===>>>
@@ -99,7 +98,7 @@ if __name__ == "__main__":
     httpd.socket = ctx.wrap_socket(httpd.socket, server_side=True)
 
     print(f"\nHTTPS RPC Proxy (hard‑coded auth)")
-    print(f"   iOS → https://10.158.123.186:{HTTPS_PORT}/…")
+    print(f"   iOS → https://x.x.x.x:{HTTPS_PORT}/…")
     print(f"   Core ← http://{RPC_HOST}:{RPC_PORT}")
     print(f"   User: {RPC_USER}")
     print(f"   Auth header: {_AUTH_HEADER[:20]}…\n")
