@@ -23,6 +23,8 @@ HTTPS → HTTP proxy for Bitcoin Core RPC
 #rpcbind=0.0.0.0
 #rpcallowip=YOUR_IP_HERE
 
+# Restart your node after editing the bitcoin.conf
+
 # Save this script in the same directory as the cert or add the cert and path below.
 
 # In Fully Noded add YOUR_IP_ADDRESS:8443 in the node address field, and add the cert using: cat bitcoin-proxy.crt to get the text of the cert
