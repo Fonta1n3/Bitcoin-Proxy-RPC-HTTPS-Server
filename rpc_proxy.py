@@ -5,6 +5,33 @@ HTTPS → HTTP proxy for Bitcoin Core RPC
 - Works with or without /wallet/…
 """
 
+### Guide:
+## Get your LAN address:
+# ipconfig getifaddr en0
+
+## Create a cert
+#openssl req -x509 -newkey rsa:2048 \
+#  -keyout bitcoin-proxy.key \
+#  -out bitcoin-proxy.crt \
+#  -days 365 \
+#  -nodes \
+#  -subj "/CN=YOUR_IP_HERE" \
+#  -addext "extendedKeyUsage=serverAuth" \
+#  -addext "subjectAltName=IP:YOUR_IP_HERE"
+
+## In your bitcoin.conf
+#rpcbind=0.0.0.0
+#rpcallowip=YOUR_IP_HERE
+
+# Save this script in the same directory as the cert or add the cert and path below.
+
+# In Fully Noded add YOUR_IP_ADDRESS:8443 in the node address field, and add the cert using: cat bitcoin-proxy.crt to get the text of the cert
+
+# Change the hardcoded rpc credentials below, in Fully Noded you can put any rpc credentials, they won't be used.
+
+# To start the script make it executable with: chmod +x rpc_proxy.py
+# To run it: python3 rpc_proxy.py
+
 import http.server
 import ssl
 import urllib.request
@@ -42,11 +69,11 @@ class SimpleRPCProxy(http.server.BaseHTTPRequestHandler):
             return
 
         # 2. Debug
-        print("\n=== PROXY REQUEST ===")
-        print(f"Path: {self.path}")
-        print(f"Body: {body.decode(errors='replace')}")
-        #print(f"Authorization sent: {_AUTH_HEADER[:20]}…")
-        print("=====================\n")
+#        print("\n=== PROXY REQUEST ===")
+#        print(f"Path: {self.path}")
+#        print(f"Body: {body.decode(errors='replace')}")
+#        print(f"Authorization sent: {_AUTH_HEADER[:20]}…")
+#        print("=====================\n")
 
         # 3. Forward to Bitcoin Core
         target = f"http://{RPC_HOST}:{RPC_PORT}{self.path}"
@@ -62,7 +89,7 @@ class SimpleRPCProxy(http.server.BaseHTTPRequestHandler):
                     self.send_header(k, v)
                 self.end_headers()
                 self.wfile.write(resp_body)
-                print(f"→ {resp.status} ({len(resp_body)} bytes)")
+                #print(f"→ {resp.status} ({len(resp_body)} bytes)")
 
         except urllib.error.HTTPError as e:
             err_body = e.read()
@@ -83,7 +110,7 @@ class SimpleRPCProxy(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Type", "text/plain")
         self.end_headers()
         self.wfile.write(msg.encode())
-        print(f"← {code} {msg}")
+        #print(f"← {code} {msg}")
 
     def log_message(self, *args):
         pass   # silence default logs
